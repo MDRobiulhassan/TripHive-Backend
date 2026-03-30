@@ -1,5 +1,6 @@
 package com.example.AirBnb_Clone.controller;
 
+import com.example.AirBnb_Clone.dto.request.HotelPriceDTO;
 import com.example.AirBnb_Clone.dto.request.HotelSearchRequest;
 import com.example.AirBnb_Clone.dto.response.HotelInfoResponseDTO;
 import com.example.AirBnb_Clone.dto.response.HotelResponseDTO;
@@ -20,7 +21,7 @@ public class HotelBrowserController {
 
     @PostMapping("/search")
     public ResponseEntity<?> searchHotels(@RequestBody HotelSearchRequest hotelSearchRequest) {
-        Page<HotelResponseDTO> page = inventoryService.searchHotels(hotelSearchRequest);
+        Page<HotelPriceDTO> page = inventoryService.searchHotels(hotelSearchRequest);
         return ResponseEntity.ok(page);
     }
 

@@ -1,10 +1,13 @@
 package com.example.AirBnb_Clone.serviceImpl;
 
+import com.example.AirBnb_Clone.dto.request.HotelPriceDTO;
 import com.example.AirBnb_Clone.dto.request.HotelSearchRequest;
 import com.example.AirBnb_Clone.dto.response.HotelResponseDTO;
 import com.example.AirBnb_Clone.entity.Hotel;
+import com.example.AirBnb_Clone.entity.HotelMinPrice;
 import com.example.AirBnb_Clone.entity.Inventory;
 import com.example.AirBnb_Clone.entity.Room;
+import com.example.AirBnb_Clone.repository.HotelMinPriceRepository;
 import com.example.AirBnb_Clone.repository.InventoryRepository;
 import com.example.AirBnb_Clone.service.InventoryService;
 import jakarta.transaction.Transactional;
@@ -28,6 +31,7 @@ import java.util.List;
 public class InventoryServiceImpl implements InventoryService {
 
     private final InventoryRepository inventoryRepository;
+    private final HotelMinPriceRepository hotelMinPriceRepository;
     private final ModelMapper modelMapper;
 
     @Override
@@ -64,14 +68,14 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     @Override
-    public Page<HotelResponseDTO> searchHotels(HotelSearchRequest hotelSearchRequest) {
+    public Page<HotelPriceDTO> searchHotels(HotelSearchRequest hotelSearchRequest) {
         log.info("Searching Hotels with {} city , from {} to {}",hotelSearchRequest.getCity(),
                 hotelSearchRequest.getCheckInDate(),hotelSearchRequest.getCheckOutDate());
 
         Pageable pageable = PageRequest.of(hotelSearchRequest.getPage(), hotelSearchRequest.getSize());
         Long dateCount = ChronoUnit.DAYS.between(hotelSearchRequest.getCheckInDate(), hotelSearchRequest.getCheckOutDate());
 
-        Page<Hotel> hotels = inventoryRepository.findHotelsWithAvailableInventory(
+        return hotelMinPriceRepository.findHotelsWithAvailableInventory(
                 hotelSearchRequest.getCity(),
                 hotelSearchRequest.getCheckInDate(),
                 hotelSearchRequest.getCheckOutDate(),
@@ -79,7 +83,5 @@ public class InventoryServiceImpl implements InventoryService {
                 dateCount,
                 pageable
         );
-
-        return hotels.map(hotel -> modelMapper.map(hotel, HotelResponseDTO.class));
     }
 }
