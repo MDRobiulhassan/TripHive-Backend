@@ -1,9 +1,12 @@
 package com.example.AirBnb_Clone.advices;
 
 import com.example.AirBnb_Clone.exceptions.ResourceNotFoundException;
+import io.jsonwebtoken.JwtException;
+import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -39,5 +42,23 @@ public class GlobalExceptionHandler
 
     private ResponseEntity<?> buildErrorResponseEntity(ApiError apiError) {
         return new ResponseEntity<>(new ApiResponse(apiError), apiError.getStatus());
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<?> handleAuthenticationException(AuthenticationException exception) {
+        ApiError apiError = ApiError.builder().status(HttpStatus.UNAUTHORIZED).message(exception.getMessage()).build();
+        return buildErrorResponseEntity(apiError);
+    }
+
+    @ExceptionHandler(JwtException.class)
+    public ResponseEntity<?> handleJwtException(JwtException exception) {
+        ApiError apiError = ApiError.builder().status(HttpStatus.UNAUTHORIZED).message("Invalid or expired JWT token").build();
+        return buildErrorResponseEntity(apiError);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<?> handleAccessDeniedException(AccessDeniedException exception) {
+        ApiError apiError = ApiError.builder().status(HttpStatus.FORBIDDEN).message("Access denied: " + exception.getMessage()).build();
+        return buildErrorResponseEntity(apiError);
     }
 }

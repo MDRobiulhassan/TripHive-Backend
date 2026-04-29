@@ -7,12 +7,14 @@ import com.example.AirBnb_Clone.dto.response.GuestResponseDTO;
 import com.example.AirBnb_Clone.entity.*;
 import com.example.AirBnb_Clone.entity.enums.BookingStatus;
 import com.example.AirBnb_Clone.exceptions.ResourceNotFoundException;
+import com.example.AirBnb_Clone.exceptions.UnauthorisedException;
 import com.example.AirBnb_Clone.repository.*;
-import com.example.AirBnb_Clone.service.HotelBookingService;
+import com.example.AirBnb_Clone.service.BookingService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -20,11 +22,12 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class HotelBookingServiceImpl implements HotelBookingService {
+public class BookingServiceImpl implements BookingService {
 
     private final BookingRepository bookingRepository;
     private final HotelRepository hotelRepository;
@@ -79,6 +82,11 @@ public class HotelBookingServiceImpl implements HotelBookingService {
 
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Booking with ID : {} not found" + bookingId));
+        User user = getCurrentUser();
+
+        if(!user.equals(booking.getUser())){
+            throw new UnauthorisedException("User is not the owner of the booking");
+        }
 
         if(hasBookingExpired(booking)){
             throw new IllegalArgumentException("Booking has already expired");
@@ -92,7 +100,7 @@ public class HotelBookingServiceImpl implements HotelBookingService {
 
         for(GuestDTO guestDTO : guestDTOList){
             Guest guest = modelMapper.map(guestDTO, Guest.class);
-            guest.setUser(getCurrentUser());
+            guest.setUser(user);
             guest = guestRepository.save(guest);
             booking.getGuests().add(guest);
 
@@ -111,8 +119,6 @@ public class HotelBookingServiceImpl implements HotelBookingService {
     }
 
     private User getCurrentUser() {
-        User user = new User();
-        user.setId(1L);
-        return user;
+        return (User) Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getPrincipal();
     }
 }

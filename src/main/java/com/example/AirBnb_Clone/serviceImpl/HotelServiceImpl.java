@@ -6,7 +6,9 @@ import com.example.AirBnb_Clone.dto.response.HotelResponseDTO;
 import com.example.AirBnb_Clone.dto.response.RoomResponseDTO;
 import com.example.AirBnb_Clone.entity.Hotel;
 import com.example.AirBnb_Clone.entity.Room;
+import com.example.AirBnb_Clone.entity.User;
 import com.example.AirBnb_Clone.exceptions.ResourceNotFoundException;
+import com.example.AirBnb_Clone.exceptions.UnauthorisedException;
 import com.example.AirBnb_Clone.repository.HotelRepository;
 import com.example.AirBnb_Clone.repository.RoomRepository;
 import com.example.AirBnb_Clone.service.HotelService;
@@ -15,9 +17,11 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,6 +39,8 @@ public class HotelServiceImpl implements HotelService {
         log.info("Creating Hotel with Name : {}", hoteldto.getName());
         Hotel hotel = modelMapper.map(hoteldto, Hotel.class);
         hotel.setActive(false);
+        User user = (User) Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getPrincipal();
+        hotel.setOwner(user);
         hotel = hotelRepository.save(hotel);
         log.info("Hotel Created with ID : {}", hotel.getId());
         return modelMapper.map(hotel, HotelResponseDTO.class);
@@ -54,6 +60,13 @@ public class HotelServiceImpl implements HotelService {
     public HotelResponseDTO getHotelById(Long id) {
         log.info("Getting Hotel with ID : {}", id);
         Hotel hotel = hotelRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Hotel Not Found with ID :" + id));
+
+        User user = (User) Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getPrincipal();
+        assert user != null;
+        if(!user.equals(hotel.getOwner())){
+            throw new UnauthorisedException("This User Does not Own this Hotel");
+        }
+
         log.info("Hotel Found : {}", hotel);
         return modelMapper.map(hotel, HotelResponseDTO.class);
     }
@@ -62,6 +75,13 @@ public class HotelServiceImpl implements HotelService {
     public HotelResponseDTO updateHotel(HotelDTO hoteldto, Long id) {
         log.info("Updating Hotel with ID : {}", id);
         Hotel hotel = hotelRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Hotel Not Found with ID :" + id));
+
+        User user = (User) Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getPrincipal();
+        assert user != null;
+        if(!user.equals(hotel.getOwner())){
+            throw new UnauthorisedException("This User Does not Own this Hotel");
+        }
+
         modelMapper.map(hoteldto, hotel);
         Hotel savedHotel = hotelRepository.save(hotel);
         log.info("Hotel Updated with ID : {}", savedHotel);
@@ -73,6 +93,11 @@ public class HotelServiceImpl implements HotelService {
     public void deleteHotelById(Long id) {
         Hotel hotel = hotelRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Hotel Not Found with ID :" + id));
 
+        User user = (User) Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getPrincipal();
+        assert user != null;
+        if(!user.equals(hotel.getOwner())){
+            throw new UnauthorisedException("This User Does not Own this Hotel");
+        }
 
         for (Room room : hotel.getRooms()) {
             inventoryService.deleteAllInventories(room);
@@ -86,6 +111,13 @@ public class HotelServiceImpl implements HotelService {
     public void activateHotel(Long id) {
         log.info("Activating Hotel with ID : {}", id);
         Hotel hotel = hotelRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Hotel Not Found with ID :" + id));
+
+        User user = (User) Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getPrincipal();
+        assert user != null;
+        if(!user.equals(hotel.getOwner())){
+            throw new UnauthorisedException("This User Does not Own this Hotel");
+        }
+
         hotel.setActive(true);
 
         for (Room room : hotel.getRooms()) {

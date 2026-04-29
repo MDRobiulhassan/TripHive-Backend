@@ -3,9 +3,11 @@ package com.example.AirBnb_Clone.serviceImpl;
 import com.example.AirBnb_Clone.dto.request.LoginRequest;
 import com.example.AirBnb_Clone.dto.request.SignUpRequest;
 import com.example.AirBnb_Clone.dto.response.LoginResponse;
+import com.example.AirBnb_Clone.dto.response.RefreshTokenResponse;
 import com.example.AirBnb_Clone.dto.response.SignUpResponse;
 import com.example.AirBnb_Clone.entity.User;
 import com.example.AirBnb_Clone.entity.enums.Roles;
+import com.example.AirBnb_Clone.exceptions.ResourceNotFoundException;
 import com.example.AirBnb_Clone.repository.UserRepository;
 import com.example.AirBnb_Clone.security.JwtService;
 import com.example.AirBnb_Clone.service.AuthService;
@@ -57,5 +59,12 @@ public class AuthServiceImpl implements AuthService {
         String refreshToken = jwtService.generateRefreshToken(user);
 
         return new LoginResponse(accessToken, refreshToken);
+    }
+
+    @Override
+    public RefreshTokenResponse refreshToken(String refreshToken) {
+        Long id = jwtService.getUserIdFromToken(refreshToken);
+        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        return new RefreshTokenResponse(jwtService.generateAccessToken(user));
     }
 }
