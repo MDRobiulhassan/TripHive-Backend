@@ -1,6 +1,6 @@
 package com.example.AirBnb_Clone.entity;
 
-import com.example.AirBnb_Clone.entity.enums.Gender;
+import com.example.AirBnb_Clone.enums.Gender;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

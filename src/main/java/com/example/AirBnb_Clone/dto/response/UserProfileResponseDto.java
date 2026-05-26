@@ -3,10 +3,13 @@ package com.example.AirBnb_Clone.dto.response;
 import com.example.AirBnb_Clone.enums.Gender;
 import lombok.Data;
 
+import java.time.LocalDate;
+
 @Data
-public class GuestResponseDTO {
+public class UserProfileResponseDto {
     private Long id;
     private String name;
-    private Integer age;
+    private LocalDate dateOfBirth;
     private Gender gender;
+    private String email;
 }

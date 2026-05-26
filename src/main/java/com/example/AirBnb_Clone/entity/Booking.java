@@ -1,6 +1,6 @@
 package com.example.AirBnb_Clone.entity;
 
-import com.example.AirBnb_Clone.entity.enums.BookingStatus;
+import com.example.AirBnb_Clone.enums.BookingStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;

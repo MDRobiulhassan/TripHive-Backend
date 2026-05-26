@@ -1,7 +1,7 @@
 package com.example.AirBnb_Clone.dto.response;
 
 import com.example.AirBnb_Clone.entity.Guest;
-import com.example.AirBnb_Clone.entity.enums.BookingStatus;
+import com.example.AirBnb_Clone.enums.BookingStatus;
 import lombok.Data;
 
 import java.math.BigDecimal;

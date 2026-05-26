@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static com.example.AirBnb_Clone.util.AppUtil.getCurrentUser;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -46,15 +48,15 @@ public class HotelServiceImpl implements HotelService {
         return modelMapper.map(hotel, HotelResponseDTO.class);
     }
 
-    @Override
-    public List<HotelResponseDTO> getAllHotels() {
-        log.info("Getting All Hotels");
-        List<Hotel> hotels = hotelRepository.findAll();
-        log.info("All Hotels Found : {}", hotels);
-        return hotels.stream()
-                .map(hotel -> modelMapper.map(hotel, HotelResponseDTO.class))
-                .collect(Collectors.toList());
-    }
+//    @Override
+//    public List<HotelResponseDTO> getAllHotels() {
+//        log.info("Getting All Hotels");
+//        List<Hotel> hotels = hotelRepository.findAll();
+//        log.info("All Hotels Found : {}", hotels);
+//        return hotels.stream()
+//                .map(hotel -> modelMapper.map(hotel, HotelResponseDTO.class))
+//                .collect(Collectors.toList());
+//    }
 
     @Override
     public HotelResponseDTO getHotelById(Long id) {
@@ -63,7 +65,7 @@ public class HotelServiceImpl implements HotelService {
 
         User user = (User) Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getPrincipal();
         assert user != null;
-        if(!user.equals(hotel.getOwner())){
+        if (!user.equals(hotel.getOwner())) {
             throw new UnauthorisedException("This User Does not Own this Hotel");
         }
 
@@ -78,7 +80,7 @@ public class HotelServiceImpl implements HotelService {
 
         User user = (User) Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getPrincipal();
         assert user != null;
-        if(!user.equals(hotel.getOwner())){
+        if (!user.equals(hotel.getOwner())) {
             throw new UnauthorisedException("This User Does not Own this Hotel");
         }
 
@@ -95,7 +97,7 @@ public class HotelServiceImpl implements HotelService {
 
         User user = (User) Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getPrincipal();
         assert user != null;
-        if(!user.equals(hotel.getOwner())){
+        if (!user.equals(hotel.getOwner())) {
             throw new UnauthorisedException("This User Does not Own this Hotel");
         }
 
@@ -114,7 +116,7 @@ public class HotelServiceImpl implements HotelService {
 
         User user = (User) Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getPrincipal();
         assert user != null;
-        if(!user.equals(hotel.getOwner())){
+        if (!user.equals(hotel.getOwner())) {
             throw new UnauthorisedException("This User Does not Own this Hotel");
         }
 
@@ -135,6 +137,16 @@ public class HotelServiceImpl implements HotelService {
                 .toList();
 
         return new HotelInfoResponseDTO(modelMapper.map(hotel, HotelResponseDTO.class), rooms);
+    }
+
+    @Override
+    public List<HotelResponseDTO> getAllHotels() {
+        User user = getCurrentUser();
+        log.info("Getting All Hotels with User : {}", user);
+        List<Hotel> hotels = hotelRepository.findByOwner(user);
+        return hotels.stream()
+                .map(hotel -> modelMapper.map(hotel, HotelResponseDTO.class))
+                .collect(Collectors.toList());
     }
 
 }

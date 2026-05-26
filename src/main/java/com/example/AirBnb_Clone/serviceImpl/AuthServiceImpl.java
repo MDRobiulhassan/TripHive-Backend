@@ -6,7 +6,7 @@ import com.example.AirBnb_Clone.dto.response.LoginResponse;
 import com.example.AirBnb_Clone.dto.response.RefreshTokenResponse;
 import com.example.AirBnb_Clone.dto.response.SignUpResponse;
 import com.example.AirBnb_Clone.entity.User;
-import com.example.AirBnb_Clone.entity.enums.Roles;
+import com.example.AirBnb_Clone.enums.Roles;
 import com.example.AirBnb_Clone.exceptions.ResourceNotFoundException;
 import com.example.AirBnb_Clone.repository.UserRepository;
 import com.example.AirBnb_Clone.security.JwtService;

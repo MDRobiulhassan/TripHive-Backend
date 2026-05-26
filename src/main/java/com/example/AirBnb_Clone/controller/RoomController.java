@@ -1,7 +1,6 @@
 package com.example.AirBnb_Clone.controller;
 
 import com.example.AirBnb_Clone.dto.request.RoomDTO;
-
 import com.example.AirBnb_Clone.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,13 +27,18 @@ public class RoomController {
     }
 
     @GetMapping("/{roomId}")
-    public ResponseEntity<?> getRoomById(@PathVariable Long roomId,@PathVariable Long hotelId) {
+    public ResponseEntity<?> getRoomById(@PathVariable Long roomId, @PathVariable Long hotelId) {
         return ResponseEntity.ok(roomService.getRoomById(roomId));
     }
 
     @DeleteMapping("/{roomId}")
-    public ResponseEntity<?> deleteRoomById(@PathVariable Long roomId,@PathVariable Long hotelId) {
+    public ResponseEntity<?> deleteRoomById(@PathVariable Long roomId, @PathVariable Long hotelId) {
         roomService.deleteRoomById(roomId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @PutMapping("/{roomId}")
+    public ResponseEntity<?> updateRoomById(@PathVariable Long hotelId, @PathVariable Long roomId, @RequestBody RoomDTO roomDTO) {
+        return ResponseEntity.ok(roomService.updateRoomById(hotelId, roomId, roomDTO));
     }
 }

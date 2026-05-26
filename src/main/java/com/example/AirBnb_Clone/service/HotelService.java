@@ -10,10 +10,11 @@ import java.util.List;
 
 public interface HotelService {
     HotelResponseDTO createHotel(HotelDTO hoteldto);
-    List<HotelResponseDTO> getAllHotels();
+//    List<HotelResponseDTO> getAllHotels();
     HotelResponseDTO getHotelById(Long id);
     HotelResponseDTO updateHotel(HotelDTO hoteldto,Long id);
     void deleteHotelById(Long id);
     void activateHotel(Long id);
     HotelInfoResponseDTO getHotelInfoById(Long hotelId);
+    List<HotelResponseDTO> getAllHotels();
 }

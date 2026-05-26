@@ -1,11 +1,14 @@
 package com.example.AirBnb_Clone.controller;
 
 import com.example.AirBnb_Clone.dto.request.HotelDTO;
+import com.example.AirBnb_Clone.service.BookingService;
 import com.example.AirBnb_Clone.service.HotelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 
 @RestController
 @RequiredArgsConstructor
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class HotelController {
 
     private final HotelService hotelService;
+    private final BookingService bookingService;
 
     @PostMapping
     public ResponseEntity<?> createHotel(@RequestBody HotelDTO hotelDTO) {
@@ -21,10 +25,10 @@ public class HotelController {
                 .body(hotelService.createHotel(hotelDTO));
     }
 
-    @GetMapping
-    public ResponseEntity<?> getAllHotels() {
-        return ResponseEntity.ok(hotelService.getAllHotels());
-    }
+//    @GetMapping
+//    public ResponseEntity<?> getAllHotels() {
+//        return ResponseEntity.ok(hotelService.getAllHotels());
+//    }
 
     @GetMapping("/{hotelId}")
     public ResponseEntity<?> getHotelById(@PathVariable Long hotelId) {
@@ -33,7 +37,7 @@ public class HotelController {
 
     @PutMapping("/{hotelId}")
     public ResponseEntity<?> updateHotel(@PathVariable Long hotelId, @RequestBody HotelDTO hotelDTO) {
-        return ResponseEntity.ok(hotelService.updateHotel(hotelDTO,hotelId));
+        return ResponseEntity.ok(hotelService.updateHotel(hotelDTO, hotelId));
     }
 
     @DeleteMapping("/{hotelId}")
@@ -46,5 +50,24 @@ public class HotelController {
     public ResponseEntity<?> activateHotel(@PathVariable Long hotelId) {
         hotelService.activateHotel(hotelId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getAllHotels() {
+        return ResponseEntity.ok(hotelService.getAllHotels());
+    }
+
+    @GetMapping("/{hotelId}/bookings")
+    public ResponseEntity<?> getAllBookingsByHotel(@PathVariable Long hotelId) {
+        return ResponseEntity.ok(bookingService.getAllBookingsByHotel(hotelId));
+    }
+
+    @GetMapping("/{hotelId}/reports")
+    public ResponseEntity<?> getHotelReport(@PathVariable Long hotelId,
+                                            @RequestParam(required = false) LocalDate startDate,
+                                            @RequestParam(required = false) LocalDate endDate) {
+        if(startDate==null) startDate = LocalDate.now().minusMonths(1);
+        if(endDate==null) endDate = LocalDate.now();
+        return ResponseEntity.ok(bookingService.getHotelReport(hotelId,startDate,endDate));
     }
 }

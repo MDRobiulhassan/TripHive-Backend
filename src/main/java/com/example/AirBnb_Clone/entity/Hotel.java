@@ -45,7 +45,7 @@ public class Hotel {
     @Embedded
     private HotelContactInfo contactInfo;
 
-    @ManyToOne(optional = false,fetch =  FetchType.LAZY)
+    @ManyToOne(optional = false)
     private User owner;
 
     @OneToMany(mappedBy = "hotel")

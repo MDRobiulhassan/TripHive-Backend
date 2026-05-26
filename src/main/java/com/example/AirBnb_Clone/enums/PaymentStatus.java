@@ -1,4 +1,4 @@
-package com.example.AirBnb_Clone.entity.enums;
+package com.example.AirBnb_Clone.enums;
 
 public enum PaymentStatus {
     PENDING,

@@ -1,12 +1,14 @@
 package com.example.AirBnb_Clone.entity;
 
-import com.example.AirBnb_Clone.entity.enums.Roles;
+import com.example.AirBnb_Clone.enums.Gender;
+import com.example.AirBnb_Clone.enums.Roles;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Set;
@@ -27,6 +29,10 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private LocalDate dateOfBirth;
+
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
 
     @Column(unique = true, nullable = false)
     private String email;
