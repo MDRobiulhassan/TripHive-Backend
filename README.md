@@ -2,6 +2,13 @@
 
 A full-featured backend application for an Airbnb-like hotel booking platform built with Spring Boot 4.0.1 and Java 17. The system supports dynamic pricing strategies, secure authentication with JWT, payment processing via Stripe, and comprehensive booking management.
 
+## API Documentation
+
+Explore all available endpoints through Swagger UI:
+
+**Backend URL:**  
+https://airbnb-backend-g0n2.onrender.com/swagger-ui/index.html#/
+
 ## Table of Contents
 
 - [Features](#features)
