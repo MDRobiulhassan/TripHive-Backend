@@ -7,7 +7,7 @@ A full-featured backend application for an Airbnb-like hotel booking platform bu
 Explore all available endpoints through Swagger UI:
 
 **Backend URL:**  
-
+https://triphive-backend.up.railway.app/swagger-ui/index.html
 
 ## Table of Contents
 
