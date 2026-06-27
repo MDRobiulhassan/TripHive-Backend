@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>AirBnb-Clone</artifactId>
+	<artifactId>TripHive-Backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>AirBnb-Clone</name>
 	<description>Demo project for Spring Boot</description>

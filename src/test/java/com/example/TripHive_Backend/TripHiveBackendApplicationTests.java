@@ -1,0 +1,13 @@
+package com.example.TripHive_Backend;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class TripHiveBackendApplicationTests {
+
+	@Test
+	void contextLoads() {
+	}
+
+}
