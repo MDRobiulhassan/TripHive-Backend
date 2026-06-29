@@ -81,7 +81,7 @@ src/main/java/com/example/AirBnb_Clone/
 ├── serviceImpl/           # Service implementations
 ├── strategy/             # Pricing strategy implementations
 ├── util/                 # Utility classes
-└── AirBnbCloneApplication.java  # Main application class
+└── TriHiveBackendApplication.java  # Main application class
 
 src/main/resources/
 ├── application.properties # Configuration properties
@@ -103,7 +103,7 @@ src/main/resources/
 
 ```bash
 git clone <repository-url>
-cd AirBnb-Clone
+cd TriHive-Backend
 ```
 
 ### 2. Install Dependencies
@@ -117,7 +117,7 @@ mvn clean install
 Create a PostgreSQL database:
 
 ```sql
-CREATE DATABASE airbnb_clone;
+CREATE DATABASE triphive;
 ```
 
 ### 4. Configure Environment Variables
@@ -140,7 +140,7 @@ Or build and run the JAR:
 
 ```bash
 mvn package
-java -jar target/AirBnb-Clone-0.0.1-SNAPSHOT.jar
+java -jar target/TriHive-Backend-0.0.1-SNAPSHOT.jar
 ```
 
 The application will start on `http://localhost:8080` (or configured port)
@@ -151,7 +151,7 @@ Create a `.env` file in the project root or set these as system environment vari
 
 ```properties
 # Database Configuration
-DB_URL=jdbc:postgresql://localhost:5432/airbnb_clone
+DB_URL=jdbc:postgresql://localhost:5432/triphive
 DB_USERNAME=postgres
 DB_PASSWORD=your_password
 
@@ -168,7 +168,7 @@ FRONTEND_URL=http://localhost:8080
 ### Example for Development:
 
 ```bash
-export DB_URL=jdbc:postgresql://localhost:5432/airbnb_clone
+export DB_URL=jdbc:postgresql://localhost:5432/triphive
 export DB_USERNAME=postgres
 export DB_PASSWORD=password123
 export JWT_SECRET_KEY=myverysecureKeyWithAtLeast256BitsForHS256Algorithm
@@ -330,7 +330,7 @@ PricingService.calculatePrice(room, checkIn, checkOut)
 
 | Class | Responsibility |
 |-------|-----------------|
-| `AirBnbCloneApplication` | Application entry point |
+| `TriHiveBackendApplication` | Application entry point |
 | `User` | User entity with roles and auth info |
 | `Hotel` | Hotel property details |
 | `Room` | Room configurations and pricing |
@@ -375,7 +375,7 @@ mvn clean package -P production
 ### Docker Deployment (if Dockerfile exists)
 
 ```bash
-docker build -t airbnb-clone:latest .
+docker build -t TriHiveBackend:latest .
 docker run -p 8080:8080 --env-file .env airbnb-clone:latest
 ```
 
