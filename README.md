@@ -67,7 +67,7 @@ https://triphive-backend.up.railway.app/swagger-ui/index.html
 ## Project Structure
 
 ```
-src/main/java/com/example/AirBnb_Clone/
+src/main/java/com/example/TriHiveBackend/
 ├── advices/              # Global exception handlers & advice
 ├── config/               # Spring configuration & beans
 ├── controller/           # REST API endpoints
@@ -376,7 +376,7 @@ mvn clean package -P production
 
 ```bash
 docker build -t TriHiveBackend:latest .
-docker run -p 8080:8080 --env-file .env airbnb-clone:latest
+docker run -p 8080:8080 --env-file .env TriHiveBackend:latest
 ```
 
 ## Troubleshooting
@@ -384,7 +384,7 @@ docker run -p 8080:8080 --env-file .env airbnb-clone:latest
 ### Database Connection Issues
 - Verify PostgreSQL is running
 - Check `DB_URL`, `DB_USERNAME`, `DB_PASSWORD` in environment
-- Ensure database exists: `CREATE DATABASE airbnb_clone;`
+- Ensure database exists: `CREATE DATABASE triphive;`
 
 ### JWT Token Errors
 - Ensure `JWT_SECRET_KEY` is set and at least 256 bits
